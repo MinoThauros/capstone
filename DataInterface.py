@@ -29,21 +29,33 @@ def extractor():
     return Cleaned_Data
 
 
-#step1: delete rows with Q!=47
+
+def cleaner(data:pd.DataFrame):
+    """formats extracted data:#step1: delete rows with Q!=47
 #step2: round up angles
 #step3: set angles as indexes
 #step4: drop duplicates
 #step5: package every 0-360 as belonging to a single range in displacement
 #step6: packagee every the sets of displacements as member of a given run 
+    Args:
+        data (pd.DataFrame): unindexed dataframe (with respect to angles)
 
-#def indexer(data:pd.DataFrame):
-
-def cleaner(data:pd.DataFrame):
+    Returns:
+        _pd.Dataframe: desired dataframe
+    """
     HQ_data=data.drop(data[data.Q!=47].index).round({'theta':0}).set_index('theta')
     HQ_data=HQ_data[~HQ_data.index.duplicated(keep='first')]
     return HQ_data
 
 def spinPackager(spins,diplacement):
+    """packages a set of 0-360 data to the unit displacement
+
+    Args:
+        spins (pd.DataFrame[]): a list of dataframes of 0-360 data
+        diplacement (int): the indexed displacement of robot
+        
+    Returns: Full data for a given displacement (unit)
+    """
     return
 
 def runPackager(displacement, run):
@@ -52,7 +64,12 @@ def runPackager(displacement, run):
 
 
 
-print(cleaner(extractor()))
+#IDEAS:
+"""
++ returned numbers of spins are purely based on time
++-> solution: we expect a data set for a fixed amount of time; start with a desired number of spins per unit distance (desired resolution)
+=>develop an interface which receives the speed to  adjust the number of spins recieved
+"""
 
 #subsampling before processing:
 #setup file accumulation interface to be able to compare different runs
