@@ -1,14 +1,10 @@
-#interface to parse file received from the lidar into CSV format
-#perform arythemtics to compare roughly equivalent point sets
-#return a %of difference 
-
 import csv
 import pandas as pd
 import zlib
 
 #ex of address :"data/lidarFile.txt"
 def extractor(address:str):
-    """Extracts .text file and returns an array of dictionaries
+    """Extracts .text file and returns an array of strings
 
     Returns:
         _type_: list[dict[str:float]]
@@ -41,21 +37,34 @@ def convertDatatoPd(data:list[dict[str:float]]):
     Cleaned_Data=pd.DataFrame(data)
     return Cleaned_Data
 
-def sectionAtor(text:str):
-        """detects sectioning strings (for different scans)
-        
+def sectionAtor(data:list[str]):
+        """creates a list of list by detecting seperators
         Args:
             text (str): a string of text to be parsed.
 
         Returns:
             array[str]: an array of sectioned strings
         """
+        data_copy=data.copy()
+        sublists:list=[]#to store newly accumulated sublist
+        temp_element:list[str]=[""]
+        currentSeparatorIndex=-1
+        previousSeparatorIndex=-1
+        for index,item in enumerate(data):
+            if len(item)==4:
+                currentSeparatorIndex=index
+                temp_element=data[previousSeparatorIndex+1:currentSeparatorIndex]
+                del data_copy[previousSeparatorIndex+1:currentSeparatorIndex]
+                sublists.append(temp_element)
+                previousSeparatorIndex=currentSeparatorIndex
+        #print(currentSeparatorIndex+1)
+        sublists.append(data[currentSeparatorIndex+1:])
+        #sublists.append(data_copy)
+        #go through the list; when we meet a separator, append data from previous previous separator to current separator    
         #create a new array everytime we match the sectioning string
-        return
+        
+        return sublists
 
-"""
-
-"""
 def cleaner(data:pd.DataFrame):
     """formats extracted data:#step1: delete rows with Q!=47
 #step2: round up angles
@@ -104,10 +113,9 @@ def main():
     data=cleaner(convertDatatoPd(strings2dict(extractor("data/lidarFile.txt"))))
     return data
     
+print(sectionAtor(["boob","a",'bob',"b",'b0ob',"c","de",'b0ob',"f",'b0ob',"g","hi",'bo0b',"j","k","l",'bo0b',"m","n",'bo0b',"o","p","boob"]))
 
-print(main())
-#subsampling before processing:
-#setup file accumulation interface to be able to compare different runs
-#https://towardsdatascience.com/how-to-automate-lidar-point-cloud-processing-with-python-a027454a536c
+
+
 
 #plan1: subsample the dataframe to a smaller number of points; have a target number of points so that there is roughly a regular point density per unit area
