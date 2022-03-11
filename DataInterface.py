@@ -98,16 +98,6 @@ def runPackager(displacement, run):
     
 
 #IDEAS:
-"""
-+ returned numbers of spins are purely based on time
-+-> solution: we expect a data set for a fixed amount of time; start with a desired number of spins per unit distance (desired resolution)
-=>develop an interface which receives the speed to  adjust the number of spins recieved
-
-
-
-
-=>
-"""
 
 def main():
     data=cleaner(convertDatatoPd(strings2dict(extractor("data/lidarFile.txt"))))
