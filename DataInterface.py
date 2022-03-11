@@ -45,7 +45,6 @@ def sectionAtor(data:list[str]):
         Returns:
             array[str]: an array of sectioned strings
         """
-        data_copy=data.copy()
         sublists:list=[]#to store newly accumulated sublist
         temp_element:list[str]=[""]
         currentSeparatorIndex=-1
@@ -54,15 +53,16 @@ def sectionAtor(data:list[str]):
             if len(item)==4:
                 currentSeparatorIndex=index
                 temp_element=data[previousSeparatorIndex+1:currentSeparatorIndex]
-                del data_copy[previousSeparatorIndex+1:currentSeparatorIndex]
-                sublists.append(temp_element)
+                if previousSeparatorIndex+1!=currentSeparatorIndex:
+                    sublists.append(temp_element)
                 previousSeparatorIndex=currentSeparatorIndex
         #print(currentSeparatorIndex+1)
-        sublists.append(data[currentSeparatorIndex+1:])
+        endElement=data[currentSeparatorIndex+1:]
+        if endElement!=[]:
+            sublists.append(endElement)
         #sublists.append(data_copy)
         #go through the list; when we meet a separator, append data from previous previous separator to current separator    
         #create a new array everytime we match the sectioning string
-        
         return sublists
 
 def cleaner(data:pd.DataFrame):
