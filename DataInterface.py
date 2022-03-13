@@ -134,7 +134,7 @@ def DataInterface():
     scans: list[pd.DataFrame] = []
     rawdata = extractor("data/master_data.txt")
     sectionedData = sectionAtor(rawdata)
-    print('NUmber of data in 1 scan', len(sectionedData[0]))
+    #print('NUmber of data in 1 scan', len(sectionedData[0]))
     for element in sectionedData:
         temp_file = cleaner(convertDatatoPd(strings2dict(element)))
         scans.append(temp_file)
@@ -169,6 +169,6 @@ for elemet in master_data:
     print(len(elemet))
 
 
-print(len(DataInterface()[2]))
+#print(len(DataInterface()[2]))
 
 # print(master_data.index)

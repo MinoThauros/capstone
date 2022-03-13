@@ -59,7 +59,7 @@ def thresholder(data:list[pd.DataFrame]):
     return change
     
 
-test_index=[1,2,3,4]
+test_index=[1,2,3,4,10,7]
 #test_index=test_index.sort()
 print(comparator(DataInterface()[2],test_index,8))
 
