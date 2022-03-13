@@ -53,7 +53,8 @@ def comparator(newScanData:list[pd.DataFrame],comonIndexes:pd.Index, masterIndex
 def thresholder(data:list[pd.DataFrame]):
     change:bool=False
     overall_difference=sum(data)/len(data)
-    if overall_difference<=10:
+    print(overall_difference)
+    if overall_difference>=10:
         change=True
     return change
     
@@ -65,11 +66,10 @@ def thresholder(data:list[pd.DataFrame]):
 
 def mainComparator():
     masterData=DataInterface()
-    #print(masterData.head())
+    print(masterData[0].head())
     incommingData=cleaner(convertDatatoPd(basicExtractor("data/run2_clean.txt")))
     common_indexes:pd.Index=compa_adjust(incommingData,2,masterData)
     comparing=comparator(incommingData,common_indexes,2)
-    print(comparing)
     isDifferent=thresholder(comparing)
     return(isDifferent)
 
