@@ -1,4 +1,5 @@
 import csv
+from typing import final
 import pandas as pd
 import numpy as np
 import math
@@ -141,13 +142,7 @@ def DataInterface():
     return scans
 
 
-"""bugs: after rounding up angles, the dataframe is not indexed properly sometimes, it does not go from 0-360; floor doesnt solve this issue
-
-Egde cases:
-+IF (element exists in new data but not in master data):
-    =>Drop the indexes that are missing from master data 
-+IF (element exists in master data but not in new data):
-    =>Do not take these elements of new data into account for the comparison; but keep them in case next scan has them
+"""bugs: after rounding up angles, the dataframe is not indexed properly sometimes, it does not go from 0-360; floor doesnt solve this iss them
 
 =>length of comparison dataframe should be the same as the length of the smaller one
 
@@ -162,13 +157,35 @@ Performance concerns:
 +rewrite work in cython
 """
 
-
+"""
 master_data = DataInterface()
 
 for elemet in master_data:
     print(len(elemet))
+"""
 
+def basicExtractor(addy:str):
+    KeyValues=[{}]
+    file=open(addy)
+    file=file.readlines()[0]
+    file=file.split(",")#into a list for each angle/distance
+    for item in file:
+        # creates a list made of every line
+    # theta: 1.09 Dist: 00616.00 Q: 47; change this into a dictionary
+        words = item.split()
+        dataPoint = {
+            str(words[1]).replace(":", ""): float(words[2]),
+            str(words[3]).replace(":", ""): float(words[4]),
+            str(words[5]).replace(":", ""): float(words[6])}
+        KeyValues.append(dataPoint)
 
+    return KeyValues
+
+    #return KeyValues
+
+        
+
+print(cleaner(convertDatatoPd(basicExtractor("data/run2_clean.txt"))))
 #print(len(DataInterface()[2]))
 
 # print(master_data.index)

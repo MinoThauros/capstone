@@ -1,7 +1,7 @@
 from distutils.log import error
 from hashlib import new
 from typing import overload
-from DataInterface import extractor, convertDatatoPd, sectionAtor, strings2dict, DataInterface
+from DataInterface import extractor, convertDatatoPd, sectionAtor, cleaner, DataInterface, basicExtractor
 import pandas as pd
 import random
 """
@@ -52,14 +52,28 @@ def comparator(newScanData:list[pd.DataFrame],comonIndexes:pd.Index, masterIndex
 
 def thresholder(data:list[pd.DataFrame]):
     change:bool=False
-    difference_array=comparator(data)
-    overall_difference=sum(difference_array)/len(difference_array)
-    if overload(overall_difference)<0.4:
+    overall_difference=sum(data)/len(data)
+    if overall_difference<=10:
         change=True
     return change
     
 
-test_index=[1,2,3,4,10,7]
+
+#test_index=[1,2,3,4,10,7]
 #test_index=test_index.sort()
-print(comparator(DataInterface()[2],test_index,8))
+#print(comparator(DataInterface()[2],test_index,8))
+
+def mainComparator():
+    masterData=DataInterface()
+    #print(masterData.head())
+    incommingData=cleaner(convertDatatoPd(basicExtractor("data/run2_clean.txt")))
+    common_indexes:pd.Index=compa_adjust(incommingData,2,masterData)
+    comparing=comparator(incommingData,common_indexes,2)
+    print(comparing)
+    isDifferent=thresholder(comparing)
+    return(isDifferent)
+
+print(mainComparator())
+    
+    
 
