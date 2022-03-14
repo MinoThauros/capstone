@@ -1,9 +1,7 @@
-from distutils.log import error
 from hashlib import new
 from typing import overload
 from DataInterface import extractor, convertDatatoPd, sectionAtor, cleaner, DataInterface, basicExtractor
 import pandas as pd
-import random
 """
 class InadquateData(error):
     pass
@@ -66,10 +64,9 @@ def thresholder(data:list[pd.DataFrame]):
 
 def mainComparator():
     masterData=DataInterface()
-    print(masterData[0].head())
-    incommingData=cleaner(convertDatatoPd(basicExtractor("data/run2_clean.txt")))
-    common_indexes:pd.Index=compa_adjust(incommingData,2,masterData)
-    comparing=comparator(incommingData,common_indexes,2)
+    incommingData=cleaner(convertDatatoPd(basicExtractor("data/all_close_run2_good.txt")))
+    common_indexes:pd.Index=compa_adjust(incommingData,6,masterData)
+    comparing=comparator(incommingData,common_indexes,6)
     isDifferent=thresholder(comparing)
     return(isDifferent)
 

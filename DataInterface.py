@@ -97,26 +97,6 @@ def cleaner(data: pd.DataFrame):
     return HQ_data
 
 
-def spinPackager(spins, diplacement):
-    """packages a set of 0-360 data to the unit displacement
-
-    Args:
-        spins (pd.DataFrame[]): a list of dataframes of 0-360 data
-        diplacement (int): the indexed displacement of robot
-
-    Returns: Full data for a given displacement (unit)
-    """
-    return
-
-
-def runPackager(displacement, run):
-    """_summary_: standadizes the number of angles for a given displacement
-
-    Args:
-        displacement (_type_): _description_
-        run (_type_): _description_
-    """
-    return
 
 
 def DataInterface():
@@ -133,7 +113,7 @@ def DataInterface():
 
     temp_file: list[dict] = []
     scans: list[pd.DataFrame] = []
-    rawdata = extractor("data/master_data.txt")
+    rawdata = extractor("data/half_close_master.txt")
     sectionedData = sectionAtor(rawdata)
     #print('NUmber of data in 1 scan', len(sectionedData[0]))
     for element in sectionedData:
@@ -142,36 +122,20 @@ def DataInterface():
     return scans
 
 
-"""bugs: after rounding up angles, the dataframe is not indexed properly sometimes, it does not go from 0-360; floor doesnt solve this iss them
-
-=>length of comparison dataframe should be the same as the length of the smaller one
-
-Clarifications (assumptions):
-+the comparation function would be called directly from driving API; called everytime a new scan is received
-+the new scan will then be cleaned up and packaged into a dataframe
-+The dataframe will then be compared to corresponding dataframe in master data; how to do this?
-    ==> drive function which calls the comparator will also send an index sequencially incremented when the function is called
-    ==> this index ought to exist as a global variable in the file from which the comparator is called
-    
-Performance concerns:
-+rewrite work in cython
-"""
-
-"""
-master_data = DataInterface()
-
-for elemet in master_data:
-    print(len(elemet))
-"""
-
 def basicExtractor(addy:str):
-    KeyValues=[{}]
     file=open(addy)
     file=file.readlines()[0]
-    file=file.split(",")#into a list for each angle/distance
+    output=arrayExtractor(file)
+    return output
+
+    #return KeyValues
+    
+def arrayExtractor(fileRaw:list[str]):
+    KeyValues=[{}]
+    file=fileRaw.split(",")#into a list for each angle/distance
     for item in file:
         # creates a list made of every line
-    # theta: 1.09 Dist: 00616.00 Q: 47; change this into a dictionary
+        # theta: 1.09 Dist: 00616.00 Q: 47; change this into a dictionary
         words = item.split()
         dataPoint = {
             str(words[1]).replace(":", ""): float(words[2]),
@@ -181,11 +145,4 @@ def basicExtractor(addy:str):
 
     return KeyValues
 
-    #return KeyValues
-
         
-
-print(cleaner(convertDatatoPd(basicExtractor("data/run2_clean.txt"))))
-#print(len(DataInterface()[2]))
-
-# print(master_data.index)
