@@ -62,6 +62,7 @@ def thresholder(data:list[pd.DataFrame]):
 #test_index=test_index.sort()
 #print(comparator(DataInterface()[2],test_index,8))
 
+"""
 def mainComparator():
     masterData=DataInterface()
     incommingData=cleaner(convertDatatoPd(basicExtractor("data/all_close_run2_good.txt")))
@@ -70,7 +71,9 @@ def mainComparator():
     isDifferent=thresholder(comparing)
     return(isDifferent)
 
-print(mainComparator())
+"""
+
+
     
     
 
