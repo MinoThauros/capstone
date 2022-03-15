@@ -1,5 +1,3 @@
-import csv
-from typing import final
 import pandas as pd
 import numpy as np
 import math
@@ -21,7 +19,7 @@ def extractor(address: str):
     return myvars
 
 
-def strings2dict(myvars: list[str]):
+def strings2dict(myvars):
     """converts a list of strings into a list of dictionary"""
     KeyValues = []
     for item in myvars:
@@ -37,13 +35,13 @@ def strings2dict(myvars: list[str]):
     return KeyValues
 
 
-def convertDatatoPd(data: list[dict[str:float]]):
+def convertDatatoPd(data):
     """converts a list of strings into a list of dataframe"""
     Cleaned_Data = pd.DataFrame(data)
     return Cleaned_Data
 
 
-def sectionAtor(data: list[str]):
+def sectionAtor(data):
     """creates a list of list by detecting seperators
 
     Args:
@@ -73,7 +71,7 @@ def sectionAtor(data: list[str]):
     return sublists
 
 
-def cleaner(data: pd.DataFrame):
+def cleaner(data):
     """formats extracted data:
 #step1: delete rows with Q!=47
 #step2: round up angles
@@ -87,7 +85,6 @@ def cleaner(data: pd.DataFrame):
     Returns:
         _pd.Dataframe: desired dataframe
     """
-
     HQ_data = data.drop(data[data.Q != 47].index)
     indexes = HQ_data['theta'].apply(np.floor)
     if len(indexes) == len(HQ_data):
@@ -130,12 +127,14 @@ def basicExtractor(addy:str):
 
     #return KeyValues
     
-def arrayExtractor(fileRaw:list[str]):
+def arrayExtractor(fileRaw):
     KeyValues=[{}]
+    #print(fileRaw)
     file=fileRaw.split(",")#into a list for each angle/distance
     for item in file:
         # creates a list made of every line
         # theta: 1.09 Dist: 00616.00 Q: 47; change this into a dictionary
+        #print(item)
         words = item.split()
         dataPoint = {
             str(words[1]).replace(":", ""): float(words[2]),
@@ -144,5 +143,3 @@ def arrayExtractor(fileRaw:list[str]):
         KeyValues.append(dataPoint)
 
     return KeyValues
-
-        

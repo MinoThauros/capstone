@@ -1,5 +1,3 @@
-from hashlib import new
-from typing import overload
 from DataInterface import extractor, convertDatatoPd, sectionAtor, cleaner, DataInterface, basicExtractor
 import pandas as pd
 """
@@ -8,7 +6,7 @@ class InadquateData(error):
 """
 
 
-def compa_adjust(newScan:pd.DataFrame, masterIndex:int, masterData:list[pd.DataFrame]):
+def compa_adjust(newScan, masterIndex, masterData):
     """Compares the newly taken scan to master data and make adjustments to make the comparision right
     
     Args:
@@ -23,7 +21,7 @@ def compa_adjust(newScan:pd.DataFrame, masterIndex:int, masterData:list[pd.DataF
     comonIndexes=master_index.intersection(newScan_index)
     return comonIndexes
 
-def comparator(newScanData:list[pd.DataFrame],comonIndexes:pd.Index, masterIndex:int):
+def comparator(newScanData,comonIndexes, masterIndex,masterD):
     """_summary_: takes in newly taken scan and compares it to adequate element in master data
 
     Args:
@@ -35,7 +33,7 @@ def comparator(newScanData:list[pd.DataFrame],comonIndexes:pd.Index, masterIndex
     Returns:
         _type_: _description_
     """
-    masterData=DataInterface()[masterIndex]
+    masterData=masterD[masterIndex]
     matching_masterData=masterData.loc[comonIndexes]
     matching_newScanData=newScanData.loc[comonIndexes]
     differences:list[float]=[]
@@ -48,32 +46,20 @@ def comparator(newScanData:list[pd.DataFrame],comonIndexes:pd.Index, masterIndex
         
     return percentageDiff
 
-def thresholder(data:list[pd.DataFrame]):
+def thresholder(data):
     change:bool=False
     overall_difference=sum(data)/len(data)
-    print(overall_difference)
+    #print(overall_difference)
     if overall_difference>=10:
         change=True
     return change
-    
 
 
-#test_index=[1,2,3,4,10,7]
-#test_index=test_index.sort()
-#print(comparator(DataInterface()[2],test_index,8))
-
-"""
 def mainComparator():
     masterData=DataInterface()
     incommingData=cleaner(convertDatatoPd(basicExtractor("data/all_close_run2_good.txt")))
     common_indexes:pd.Index=compa_adjust(incommingData,6,masterData)
-    comparing=comparator(incommingData,common_indexes,6)
+    comparing=comparator(incommingData,common_indexes,6,masterData)
     isDifferent=thresholder(comparing)
     return(isDifferent)
-
-"""
-
-
-    
-    
 
